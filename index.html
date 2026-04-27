@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BrainBlitz Quiz</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0d0f;
+      --surface: #16161a;
+      --card: #1e1e24;
+      --accent: #f0e040;
+      --accent2: #ff5f6d;
+      --text: #f0f0f5;
+      --muted: #7a7a8c;
+      --correct: #3ddc84;
+      --wrong: #ff5f6d;
+      --border: rgba(255,255,255,0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(240,224,64,0.07) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(255,95,109,0.07) 0%, transparent 50%);
+      animation: bgPulse 8s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgPulse {
+      0% { transform: scale(1) rotate(0deg); }
+      100% { transform: scale(1.1) rotate(3deg); }
+    }
+
+    .screen {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .screen.hidden { display: none; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* HOME */
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1;
+      text-align: center;
+    }
+    .logo span { color: var(--accent); }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 15px;
+      text-align: center;
+      margin: 12px 0 40px;
+      letter-spacing: 0.5px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 24px;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    /* BUTTONS */
+    .btn {
+      width: 100%;
+      max-width: 320px;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0d0d0f;
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(240,224,64,0.3); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover { background: var(--card); }
+
+    /* QUIZ */
+    .quiz-header {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .question-num {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .score-badge {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .progress-bar {
+      width: 100%;
+      max-width: 400px;
+      height: 4px;
+      background: var(--card);
+      border-radius: 4px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .timer-ring {
+      position: relative;
+      width: 56px;
+      height: 56px;
+      margin-bottom: 20px;
+    }
+
+    .timer-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .timer-ring circle {
+      fill: none;
+      stroke-width: 4;
+    }
+
+    .timer-ring .track { stroke: var(--card); }
+    .timer-ring .fill { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+
+    .timer-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+
+    .question-text {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .options-grid {
+      width: 100%;
+      max-width: 400px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 12px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(240,224,64,0.08);
+    }
+
+    .option-btn.correct {
+      background: rgba(61,220,132,0.15);
+      border-color: var(--correct);
+      color: var(--correct);
+    }
+
+    .option-btn.wrong {
+      background: rgba(255,95,109,0.15);
+      border-color: var(--wrong);
+      color: var(--wrong);
+    }
+
+    .option-btn:disabled { cursor: default; }
+
+    /* RESULT */
+    .result-emoji {
+      font-size: 72px;
+      margin-bottom: 16px;
+      animation: pop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    @keyframes pop {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .result-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .result-score {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .result-score strong {
+      color: var(--accent);
+      font-size: 22px;
+    }
+
+    /* LEADERBOARD */
+    .leaderboard-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .leaderboard-sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .lb-list {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .lb-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      animation: slideIn 0.3s ease both;
+    }
+
+    .lb-item.highlight {
+      border-color: var(--accent);
+      background: rgba(240,224,64,0.06);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .lb-rank {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      width: 32px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .lb-rank.gold { color: #ffd700; }
+    .lb-rank.silver { color: #c0c0c0; }
+    .lb-rank.bronze { color: #cd7f32; }
+
+    .lb-name {
+      flex: 1;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .lb-pts {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .lb-pts span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* Feedback toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 14px;
+      z-index: 100;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.correct-toast { border-color: var(--correct); color: var(--correct); }
+    .toast.wrong-toast { border-color: var(--wrong); color: var(--wrong); }
+  </style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="screen" id="home">
+  <div class="logo">Brain<span>Blitz</span></div>
+  <p class="tagline">Test your knowledge. Beat the world.</p>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="home-best">—</div>
+      <div class="stat-label">Best Score</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="home-games">0</div>
+      <div class="stat-label">Games</div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="startQuiz()">🚀 Start Quiz</button>
+  <button class="btn btn-outline" onclick="showLeaderboard()">🏆 Leaderboard</button>
+</div>
+
+<!-- QUIZ -->
+<div class="screen hidden" id="quiz">
+  <div class="quiz-header">
+    <span class="question-num" id="q-num">Question 1/10</span>
+    <span class="score-badge" id="q-score">0 pts</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="q-progress" style="width:10%"></div>
+  </div>
+  <div class="timer-ring">
+    <svg width="56" height="56" viewBox="0 0 56 56">
+      <circle class="track" cx="28" cy="28" r="24"/>
+      <circle class="fill" id="timer-fill" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="0"/>
+    </svg>
+    <div class="timer-text" id="timer-text">15</div>
+  </div>
+  <div class="question-card">
+    <div class="question-text" id="question-text">Loading...</div>
+  </div>
+  <div class="options-grid" id="options-grid"></div>
+</div>
+
+<!-- RESULT -->
+<div class="screen hidden" id="result">
+  <div class="result-emoji" id="result-emoji">🎉</div>
+  <div class="result-title" id="result-title">Great Job!</div>
+  <div class="result-score" id="result-score">You scored <strong>0</strong> out of 10</div>
+  <button class="btn btn-primary" onclick="startQuiz()">🔄 Play Again</button>
+  <button class="btn btn-outline" onclick="showLeaderboard()">🏆 View Leaderboard</button>
+  <button class="btn btn-outline" onclick="showScreen('home')">🏠 Home</button>
+</div>
+
+<!-- LEADERBOARD -->
+<div class="screen hidden" id="leaderboard">
+  <div class="leaderboard-title">🏆 Top Players</div>
+  <div class="leaderboard-sub">Global rankings — updated live</div>
+  <div class="lb-list" id="lb-list"></div>
+  <button class="btn btn-primary" onclick="startQuiz()">🚀 Play Now</button>
+  <button class="btn btn-outline" onclick="showScreen('home')">← Back</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // Init Telegram
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  const userName = tg?.initDataUnsafe?.user?.first_name || "Player";
+  const userId = tg?.initDataUnsafe?.user?.id || "guest";
+
+  // Questions bank
+  const questions = [
+    { q: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: 2 },
+    { q: "How many planets are in our solar system?", options: ["7", "8", "9", "10"], answer: 1 },
+    { q: "What is the largest ocean on Earth?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: 3 },
+    { q: "Who wrote 'Romeo and Juliet'?", options: ["Dickens", "Shakespeare", "Tolstoy", "Hugo"], answer: 1 },
+    { q: "What is the chemical symbol for water?", options: ["WO", "H2O", "HO2", "W2O"], answer: 1 },
+    { q: "In which year did World War II end?", options: ["1943", "1944", "1945", "1946"], answer: 2 },
+    { q: "What is the fastest land animal?", options: ["Lion", "Leopard", "Cheetah", "Horse"], answer: 2 },
+    { q: "How many sides does a hexagon have?", options: ["5", "6", "7", "8"], answer: 1 },
+    { q: "What is the largest continent?", options: ["Africa", "North America", "Asia", "Europe"], answer: 2 },
+    { q: "Which element has the symbol 'Au'?", options: ["Silver", "Copper", "Iron", "Gold"], answer: 3 },
+    { q: "What is the square root of 144?", options: ["10", "11", "12", "14"], answer: 2 },
+    { q: "Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Jupiter", "Saturn"], answer: 1 },
+    { q: "What language has the most native speakers?", options: ["English", "Spanish", "Hindi", "Mandarin"], answer: 3 },
+    { q: "Who painted the Mona Lisa?", options: ["Michelangelo", "Raphael", "Da Vinci", "Botticelli"], answer: 2 },
+    { q: "What is the hardest natural substance?", options: ["Gold", "Iron", "Diamond", "Quartz"], answer: 2 },
+  ];
+
+  let currentQ = 0;
+  let score = 0;
+  let quizQuestions = [];
+  let timer = null;
+  let timeLeft = 15;
+  const CIRCUMFERENCE = 150.8;
+
+  // Storage helpers
+  function getStorage() {
+    try { return JSON.parse(localStorage.getItem('brainblitz') || '{}'); } catch { return {}; }
+  }
+  function setStorage(data) {
+    try { localStorage.setItem('brainblitz', JSON.stringify(data)); } catch {}
+  }
+
+  function getLeaderboard() {
+    const s = getStorage();
+    return s.leaderboard || [];
+  }
+
+  function updateLeaderboard(name, uid, pts) {
+    const s = getStorage();
+    let lb = s.leaderboard || [];
+    const idx = lb.findIndex(e => e.uid === uid);
+    if (idx >= 0) {
+      if (pts > lb[idx].pts) lb[idx] = { name, uid, pts };
+    } else {
+      lb.push({ name, uid, pts });
+    }
+    lb.sort((a, b) => b.pts - a.pts);
+    lb = lb.slice(0, 20);
+    s.leaderboard = lb;
+    setStorage(s);
+    return lb;
+  }
+
+  function getPersonalStats() {
+    const s = getStorage();
+    return { best: s.best || null, games: s.games || 0 };
+  }
+
+  function updatePersonalStats(pts) {
+    const s = getStorage();
+    s.games = (s.games || 0) + 1;
+    if (!s.best || pts > s.best) s.best = pts;
+    setStorage(s);
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    const el = document.getElementById(id);
+    el.classList.remove('hidden');
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = 'fadeIn 0.4s ease';
+  }
+
+  function updateHomeStats() {
+    const { best, games } = getPersonalStats();
+    document.getElementById('home-best').textContent = best !== null ? best : '—';
+    document.getElementById('home-games').textContent = games;
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type}-toast`;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
+  }
+
+  function shuffle(arr) {
+    return [...arr].sort(() => Math.random() - 0.5);
+  }
+
+  function startQuiz() {
+    quizQuestions = shuffle(questions).slice(0, 10);
+    currentQ = 0;
+    score = 0;
+    showScreen('quiz');
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    const q = quizQuestions[currentQ];
+    document.getElementById('q-num').textContent = `Question ${currentQ + 1}/10`;
+    document.getElementById('q-score').textContent = `${score} pts`;
+    document.getElementById('q-progress').style.width = `${((currentQ + 1) / 10) * 100}%`;
+    document.getElementById('question-text').textContent = q.q;
+
+    const grid = document.getElementById('options-grid');
+    grid.innerHTML = '';
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = opt;
+      btn.onclick = () => selectAnswer(i, q.answer, btn);
+      grid.appendChild(btn);
+    });
+
+    startTimer();
+  }
+
+  function startTimer() {
+    clearInterval(timer);
+    timeLeft = 15;
+    updateTimerUI();
+    timer = setInterval(() => {
+      timeLeft--;
+      updateTimerUI();
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        showToast("⏰ Time's up!", 'wrong');
+        disableOptions();
+        setTimeout(nextQuestion, 1500);
+      }
+    }, 1000);
+  }
+
+  function updateTimerUI() {
+    document.getElementById('timer-text').textContent = timeLeft;
+    const fill = document.getElementById('timer-fill');
+    const offset = CIRCUMFERENCE * (1 - timeLeft / 15);
+    fill.style.strokeDashoffset = offset;
+    fill.style.stroke = timeLeft <= 5 ? 'var(--wrong)' : timeLeft <= 10 ? '#ff9f43' : 'var(--accent)';
+  }
+
+  function selectAnswer(chosen, correct, btn) {
+    clearInterval(timer);
+    disableOptions();
+
+    const btns = document.querySelectorAll('.option-btn');
+    btns[correct].classList.add('correct');
+
+    if (chosen === correct) {
+      const pts = Math.max(10, timeLeft * 7);
+      score += pts;
+      btn.classList.add('correct');
+      showToast(`✅ +${pts} pts`, 'correct');
+    } else {
+      btn.classList.add('wrong');
+      showToast('❌ Wrong!', 'wrong');
+    }
+
+    setTimeout(nextQuestion, 1500);
+  }
+
+  function disableOptions() {
+    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+  }
+
+  function nextQuestion() {
+    currentQ++;
+    if (currentQ < 10) {
+      loadQuestion();
+    } else {
+      endQuiz();
+    }
+  }
+
+  function endQuiz() {
+    updatePersonalStats(score);
+    updateLeaderboard(userName, userId, score);
+
+    const pct = score / (10 * 15 * 7);
+    let emoji = '😅', title = 'Keep Trying!';
+    if (score >= 800) { emoji = '🏆'; title = 'Legendary!'; }
+    else if (score >= 600) { emoji = '🎉'; title = 'Excellent!'; }
+    else if (score >= 400) { emoji = '😊'; title = 'Good Job!'; }
+    else if (score >= 200) { emoji = '👍'; title = 'Not Bad!'; }
+
+    document.getElementById('result-emoji').textContent = emoji;
+    document.getElementById('result-title').textContent = title;
+    document.getElementById('result-score').innerHTML = `You scored <strong>${score}</strong> points`;
+
+    showScreen('result');
+    updateHomeStats();
+  }
+
+  function showLeaderboard() {
+    const lb = getLeaderboard();
+    const list = document.getElementById('lb-list');
+    list.innerHTML = '';
+
+    if (lb.length === 0) {
+      list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:32px">No scores yet. Be the first!</div>';
+    } else {
+      lb.forEach((entry, i) => {
+        const item = document.createElement('div');
+        const isMe = entry.uid === userId;
+        item.className = `lb-item${isMe ? ' highlight' : ''}`;
+        item.style.animationDelay = `${i * 0.05}s`;
+
+        const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+        const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1;
+
+        item.innerHTML = `
+          <div class="lb-rank ${rankClass}">${rankIcon}</div>
+          <div class="lb-name">${entry.name}${isMe ? ' <span style="color:var(--accent);font-size:11px">(you)</span>' : ''}</div>
+          <div class="lb-pts">${entry.pts}<span> pts</span></div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    showScreen('leaderboard');
+  }
+
+  // Init
+  updateHomeStats();
+</script>
+
+<!-- Monetag Ad -->
+<script src='//libtl.com/sdk.js' data-zone='10919253' data-sdk='show_10919253'></script>
+
+</body>
+</html>
