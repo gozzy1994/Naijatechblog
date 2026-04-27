@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gozzy Blog — Make Money Online & Tech Tips in Nigeria</title>
+  <meta name="description" content="Learn how to make money online in Nigeria, best tech tools, and daily earning tips. By Iloka Chukwugozie."/>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white: #ffffff;
+      --bg: #f9f9f7;
+      --border: #e8e8e4;
+      --text: #111110;
+      --text-mid: #444442;
+      --text-muted: #888886;
+      --green: #16a34a;
+      --green-light: #f0fdf4;
+      --red: #dc2626;
+      --blue: #1d4ed8;
+      --yellow: #ca8a04;
+      --yellow-light: #fefce8;
+      --serif: 'Merriweather', Georgia, serif;
+      --sans: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── TOP BAR ─── */
+    .top-bar {
+      background: var(--green);
+      color: white;
+      text-align: center;
+      padding: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    .top-bar a { color: #bbf7d0; text-decoration: underline; }
+
+    /* ─── NAV ─── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-top {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-title {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .site-title span { color: var(--green); }
+    .site-tagline { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.05em; }
+
+    .nav-links {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+    }
+
+    .nav-links a {
+      padding: 0.7rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--green);
+      border-bottom-color: var(--green);
+    }
+
+    .nav-links .nav-cta {
+      margin-left: auto;
+      background: var(--green);
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 3px;
+      border-bottom: 2px solid transparent !important;
+      font-size: 0.75rem;
+    }
+
+    /* ─── BREAKING BAR ─── */
+    .breaking-bar {
+      background: var(--red);
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 2rem;
+      font-size: 0.78rem;
+      overflow: hidden;
+    }
+
+    .breaking-label {
+      background: white;
+      color: var(--red);
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      white-space: nowrap;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+
+    .breaking-text {
+      white-space: nowrap;
+      animation: ticker 18s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-60%); }
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2rem;
+    }
+
+    .hero-main {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .hero-banner-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+    }
+
+    .hero-banner-emoji { font-size: 3rem; margin-bottom: 0.5rem; }
+
+    .hero-banner-content h2 {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 900;
+      line-height: 1.2;
+      color: white;
+    }
+
+    .hero-banner-content p { font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-top: 0.5rem; }
+
+    .hero-body { padding: 1.5rem; }
+
+    .post-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      margin-bottom: 0.8rem;
+    }
+
+    .label-money { background: var(--green-light); color: var(--green); }
+    .label-tech { background: #eff6ff; color: var(--blue); }
+    .label-hot { background: #fef2f2; color: var(--red); }
+    .label-tips { background: var(--yellow-light); color: var(--yellow); }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: 1.7rem;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-title a:hover { color: var(--green); }
+
+    .hero-excerpt {
+      color: var(--text-mid);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .author-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 500;
+      color: var(--text-mid);
+    }
+
+    .avatar {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .sep { color: var(--border); }
+
+    .read-btn {
+      display: inline-block;
+      background: var(--green);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 3px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-top: 0.8rem;
+      transition: opacity 0.2s;
+    }
+
+    .read-btn:hover { opacity: 0.85; }
+
+    /* ─── HERO SIDEBAR ─── */
+    .hero-side { display: flex; flex-direction: column; gap: 1rem; }
+
+    .side-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: border-color 0.2s;
+    }
+
+    .side-card:hover { border-color: var(--green); }
+
+    .side-card-title {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .side-card:hover .side-card-title { color: var(--green); }
+    .side-card-meta { font-size: 0.72rem; color: var(--text-muted); }
+    .side-card-excerpt { font-size: 0.82rem; color: var(--text-mid); line-height: 1.5; }
+
+    /* ─── SECTION ─── */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      padding: 0 2rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--text);
+    }
+
+    .section-head h2 {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .section-head-line { flex: 1; height: 1px; background: var(--border); }
+    .section-head a { font-size: 0.75rem; color: var(--green); font-weight: 600; white-space: nowrap; }
+
+    /* ─── CARD GRID ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-color: var(--green); }
+
+    .card-thumb {
+      height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
+    }
+
+    .thumb-green { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+    .thumb-blue { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+    .thumb-yellow { background: linear-gradient(135deg, #fef9c3, #fef08a); }
+    .thumb-purple { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); }
+    .thumb-orange { background: linear-gradient(135deg, #ffedd5, #fed7aa); }
+    .thumb-pink { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
+
+    .card-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .card-title {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .card:hover .card-title { color: var(--green); }
+
+    .card-excerpt { font-size: 0.8rem; color: var(--text-mid); line-height: 1.5; flex: 1; }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* ─── MONEY SPOTLIGHT ─── */
+    .spotlight {
+      background: linear-gradient(135deg, #064e3b, #065f46);
+      border-radius: 6px;
+      padding: 2.5rem;
+      color: white;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .spotlight h2 {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 0.8rem;
+    }
+
+    .spotlight p { font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 1.2rem; }
+
+    .spotlight-list { display: flex; flex-direction: column; gap: 0.8rem; }
+
+    .spotlight-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      padding: 0.8rem 1rem;
+      transition: background 0.2s;
+    }
+
+    .spotlight-item:hover { background: rgba(255,255,255,0.12); }
+
+    .spotlight-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+    .spotlight-text h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .spotlight-text p { font-size: 0.75rem; color: rgba(255,255,255,0.7); margin: 0; }
+
+    /* ─── LIST POSTS ─── */
+    .list-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .list-post {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+
+    .list-post:hover { border-color: var(--green); }
+
+    .list-num {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--border);
+      flex-shrink: 0;
+      line-height: 1;
+      width: 28px;
+    }
+
+    .list-content { flex: 1; }
+
+    .list-title {
+      font-family: var(--serif);
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.3rem;
+    }
+
+    .list-post:hover .list-title { color: var(--green); }
+    .list-meta-small { font-size: 0.7rem; color: var(--text-muted); }
+
+    /* ─── NEWSLETTER ─── */
+    .newsletter {
+      background: var(--yellow-light);
+      border: 1px solid #fde68a;
+      border-radius: 6px;
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    .newsletter-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+
+    .newsletter h2 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+
+    .newsletter p { color: var(--text-mid); font-size: 0.9rem; margin-bottom: 1.2rem; }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.7rem 1rem;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .newsletter-form input:focus { border-color: var(--green); }
+
+    .newsletter-form button {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .newsletter-form button:hover { opacity: 0.85; }
+    .newsletter-note { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.8rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.7);
+      padding: 2.5rem 2rem;
+      margin-top: 3rem;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .footer-brand .site-title { color: white; font-size: 1.4rem; }
+    .footer-brand p { font-size: 0.82rem; margin-top: 0.5rem; line-height: 1.6; }
+
+    .footer-col h4 {
+      color: white;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-col a { font-size: 0.82rem; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-col a:hover { color: #86efac; }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-side { display: grid; grid-template-columns: 1fr 1fr; }
+      .card-grid { grid-template-columns: 1fr 1fr; }
+      .spotlight { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-top { padding: 1rem; }
+      .hero { padding: 0 1rem; margin: 1rem auto; }
+      .section { padding: 0 1rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .list-grid { grid-template-columns: 1fr; }
+      .hero-side { grid-template-columns: 1fr; }
+      .newsletter-form { flex-direction: column; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .breaking-bar { padding: 0.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  🔥 New Post: 7 Websites That Pay Daily in Nigeria — <a href="#">Read Now</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-top">
+    <a href="#" class="site-title">Gozzy<span>Blog</span></a>
+    <p class="site-tagline">Make Money Online · Tech Tips · Nigeria</p>
+  </div>
+  <div class="nav-links">
+    <a href="#" class="active">Home</a>
+    <a href="#">Make Money</a>
+    <a href="#">Tech Tips</a>
+    <a href="#">Apps & Tools</a>
+    <a href="#">About</a>
+    <a href="#newsletter" class="nav-cta">📧 Subscribe Free</a>
+  </div>
+</nav>
+
+<!-- BREAKING -->
+<div class="breaking-bar">
+  <span class="breaking-label">🔴 TRENDING</span>
+  <span class="breaking-text">
+    7 Websites That Pay Daily in Nigeria &nbsp;•&nbsp; Best Apps to Make Money With Your Phone &nbsp;•&nbsp; How to Start a Blog and Earn ₦50,000/month &nbsp;•&nbsp; Top Freelance Sites for Nigerians in 2026 &nbsp;•&nbsp; 7 Websites That Pay Daily in Nigeria &nbsp;•&nbsp; Best Apps to Make Money With Your Phone
+  </span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-main">
+    <div class="hero-banner">
+      <div class="hero-banner-content">
+        <div class="hero-banner-emoji">💰</div>
+        <h2>Make Money Online<br/>in Nigeria — Starting Today</h2>
+        <p>Real strategies. Real results. No scams.</p>
+      </div>
+    </div>
+    <div class="hero-body">
+      <span class="post-label label-money">💰 Make Money</span>
+      <h1 class="hero-title">
+        <a href="#">7 Legit Websites That Pay Daily in Nigeria (Tested & Verified 2026)</a>
+      </h1>
+      <p class="hero-excerpt">Tired of scam websites? I personally tested these 7 platforms and got paid. From freelancing to micro-tasks, here's exactly how to get started and withdraw your earnings in Nigeria — step by step.</p>
+      <div class="post-meta">
+        <div class="author-chip">
+          <div class="avatar">IC</div>
+          <span>Iloka Chukwugozie</span>
+        </div>
+        <span class="sep">·</span>
+        <span>April 26, 2026</span>
+        <span class="sep">·</span>
+        <span>8 min read</span>
+      </div>
+      <a href="#" class="read-btn">Read Full Article →</a>
+    </div>
+  </div>
+
+  <div class="hero-side">
+    <a href="#" class="side-card">
+      <span class="post-label label-hot">🔥 Hot</span>
+      <p class="side-card-title">Best Apps To Make Money With Your Phone in Nigeria (2026)</p>
+      <p class="side-card-excerpt">These apps pay real money — and you can withdraw via Opay, Palmpay or bank transfer.</p>
+      <p class="side-card-meta">Apr 24 · 6 min read</p>
+    </a>
+
+    <a href="#" class="side-card">
+      <span class="post-label label-tech">💻 Tech</span>
+      <p class="side-card-title">How to Start Freelancing in Nigeria With Zero Experience</p>
+      <p class="side-card-excerpt">Fiverr, Upwork, Toptal — which one is best for Nigerians just starting out? Full breakdown inside.</p>
+      <p class="side-card-meta">Apr 22 · 10 min read</p>
+    </a>
+
+    <a href="#" class="side-card">
+      <span class="post-label label-tips">💡 Tips</span>
+      <p class="side-card-title">How I Made ₦50,000 Online in My First Month Blogging</p>
+      <p class="side-card-excerpt">My honest income report — what worked, what failed, and what I'd do differently.</p>
+      <p class="side-card-meta">Apr 20 · 7 min read</p>
+    </a>
+  </div>
+</div>
+
+<!-- MAKE MONEY SECTION -->
+<div class="section">
+  <div class="section-head">
+    <h2>💰 Make Money Online</h2>
+    <div class="section-head-line"></div>
+    <a href="#">View All →</a>
+  </div>
+  <div class="card-grid">
+    <a href="#" class="card">
+      <div class="card-thumb thumb-green">💵</div>
+      <div class="card-body">
+        <span class="post-label label-money">Make Money</span>
+        <h3 class="card-title">7 Legit Websites That Pay Daily in Nigeria</h3>
+        <p class="card-excerpt">Tested platforms that actually pay — withdraw via bank, Opay or Palmpay.</p>
+      </div>
+      <div class="card-footer">
+        <span>Apr 26</span>
+        <span>8 min read</span>
+      </div>
+    </a>
+
+    <a href="#" class="card">
+      <div class="card-thumb thumb-blue">📱</div>
+      <div class="card-body">
+        <span class="post-label label-hot">🔥 Hot</span>
+        <h3 class="card-title">Best Apps To Make Money With Your Phone in 2026</h3>
+        <p class="card-excerpt">Turn your smartphone into a money machine — no laptop needed.</p>
+      </div>
+      <div class="card-footer">
+        <span>Apr 24</span>
+        <span>6 min read</span>
+      </div>
+    </a>
+
+    <a href="#" class="card">
+      <div class="card-thumb thumb-yellow">🎯</div>
+      <div class="card-body">
+        <span class="post-label label-tips">Tips</span>
+        <h3 class="card-title">How to Make ₦5,000 Daily Online as a Nigerian Student</h3>
+        <p class="card-excerpt">No investment needed. Start earning from your phone or laptop today.</p>
+      </div>
+      <div class="card-footer">
+        <span>Apr 22</span>
+        <span>5 min read</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- SPOTLIGHT -->
+<div class="section">
+  <div class="spotlight">
+    <div>
+      <h2>Start Earning Online — Even as a Beginner</h2>
+      <p>You don't need experience or money to start. These are the exact methods that work in Nigeria right now in 2026.</p>
+      <a href="#" class="read-btn" style="background:white;color:#064e3b">See All Methods →</a>
+    </div>
+    <div class="spotlight-list">
+      <div class="spotlight-item">
+        <span class="spotlight-icon">✍️</span>
+        <div class="spotlight-text">
+          <h4>Freelance Writing</h4>
+          <p>Earn ₦10,000–₦50,000 per article on international platforms</p>
+        </div>
+      </div>
+      <div class="spotlight-item">
+        <span class="spotlight-icon">🎨</span>
+        <div class="spotlight-text">
+          <h4>Graphic Design</h4>
+          <p>Use Canva + Fiverr to earn from your creativity</p>
+        </div>
+      </div>
+      <div class="spotlight-item">
+        <span class="spotlight-icon">📊</span>
+        <div class="spotlight-text">
+          <h4>Affiliate Marketing</h4>
+          <p>Promote products online and earn commission per sale</p>
+        </div>
+      </div>
+      <div class="spotlight-item">
+        <span class="spotlight-icon">💻</span>
+        <div class="spotlight-text">
+          <h4>Tech Skills (Coding)</h4>
+          <p>Learn to code and earn $500–$2000/month remotely</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH TIPS SECTION -->
+<div class="section">
+  <div class="section-head">
+    <h2>💻 Tech Tips</h2>
+    <div class="section-head-line"></div>
+    <a href="#">View All →</a>
+  </div>
+  <div class="card-grid">
+    <a href="#" class="card">
+      <div class="card-thumb thumb-purple">🚀</div>
+      <div class="card-body">
+        <span class="post-label label-tech">Tech</span>
+        <h3 class="card-title">Best Free Tools Every Nigerian Blogger Needs in 2026</h3>
+        <p class="card-excerpt">From SEO to design to writing — these free tools will grow your blog fast.</p>
+      </div>
+      <div class="card-footer">
+        <span>Apr 20</span>
+        <span>7 min read</span>
+      </div>
+    </a>
+
+    <a href="#" class="card">
+      <div class="card-thumb thumb-orange">🔧</div>
+      <div class="card-body">
+        <span class="post-label label-tech">Tech</span>
+        <h3 class="card-title">How to Start a Blog for Free and Make Money in Nigeria</h3>
+        <p class="card-excerpt">Step-by-step guide to launching your blog and monetizing it from day one.</p>
+      </div>
+      <div class="card-footer">
+        <span>Apr 18</span>
+        <span>12 min read</span>
+      </div>
+    </a>
+
+    <a href="#" class="card">
+      <div class="card-thumb thumb-pink">🤖</div>
+      <div class="card-body">
+        <span class="post-label label-tech">AI</span>
+        <h3 class="card-title">How to Use AI Tools to Make Money Online in Nigeria</h3>
+        <p class="card-excerpt">ChatGPT, Canva AI, and more — here's how Nigerians are using AI to earn daily.</p>
+      </div>
+      <div class="card-footer">
+        <span>Apr 15</span>
+        <span>9 min read</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- MORE POSTS -->
+<div class="section">
+  <div class="section-head">
+    <h2>📰 More Articles</h2>
+    <div class="section-head-line"></div>
+    <a href="#">View All →</a>
+  </div>
+  <div class="list-grid">
+    <a href="#" class="list-post">
+      <span class="list-num">01</span>
+      <div class="list-content">
+        <span class="post-label label-money">Make Money</span>
+        <p class="list-title">Top 5 Freelance Sites for Nigerians That Actually Pay</p>
+        <p class="list-meta-small">Apr 14 · 6 min read</p>
+      </div>
+    </a>
+    <a href="#" class="list-post">
+      <span class="list-num">02</span>
+      <div class="list-content">
+        <span class="post-label label-tech">Tech</span>
+        <p class="list-title">How to Build a Website for Free and Earn From It</p>
+        <p class="list-meta-small">Apr 12 · 8 min read</p>
+      </div>
+    </a>
+    <a href="#" class="list-post">
+      <span class="list-num">03</span>
+      <div class="list-content">
+        <span class="post-label label-hot">🔥 Hot</span>
+        <p class="list-title">How to Get Paid on PayPal as a Nigerian in 2026</p>
+        <p class="list-meta-small">Apr 10 · 5 min read</p>
+      </div>
+    </a>
+    <a href="#" class="list-post">
+      <span class="list-num">04</span>
+      <div class="list-content">
+        <span class="post-label label-tips">Tips</span>
+        <p class="list-title">10 Side Hustles You Can Start With ₦0 in Nigeria</p>
+        <p class="list-meta-small">Apr 8 · 7 min read</p>
+      </div>
+    </a>
+    <a href="#" class="list-post">
+      <span class="list-num">05</span>
+      <div class="list-content">
+        <span class="post-label label-tech">Tech</span>
+        <p class="list-title">Best Coding Languages to Learn to Get Remote Jobs in 2026</p>
+        <p class="list-meta-small">Apr 5 · 10 min read</p>
+      </div>
+    </a>
+    <a href="#" class="list-post">
+      <span class="list-num">06</span>
+      <div class="list-content">
+        <span class="post-label label-money">Make Money</span>
+        <p class="list-title">How to Make Money on YouTube as a Nigerian Creator</p>
+        <p class="list-meta-small">Apr 2 · 9 min read</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="section" id="newsletter">
+  <div class="newsletter">
+    <div class="newsletter-emoji">📧</div>
+    <h2>Get Free Money-Making Tips Weekly</h2>
+    <p>Join 12,000+ Nigerians getting real tips on how to earn online — every week, for free.</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Enter your email address"/>
+      <button type="button">Subscribe Free</button>
+    </div>
+    <p class="newsletter-note">No spam. Unsubscribe anytime. 100% free.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="site-title">Gozzy<span style="color:#86efac">Blog</span></a>
+      <p>Real tips on how to make money online and grow with tech in Nigeria. By Iloka Chukwugozie.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <ul>
+        <li><a href="#">Make Money Online</a></li>
+        <li><a href="#">Tech Tips</a></li>
+        <li><a href="#">Apps & Tools</a></li>
+        <li><a href="#">Freelancing</a></li>
+        <li><a href="#">Blogging</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="#">Twitter / X</a></li>
+        <li><a href="#">WhatsApp Channel</a></li>
+        <li><a href="#">Telegram</a></li>
+        <li><a href="#">About Me</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 GozzyBlog by Iloka Chukwugozie. All rights reserved.</span>
+    <span>Made with ❤️ in Nigeria 🇳🇬</span>
+  </div>
+</footer>
+
+</body>
+</html>
